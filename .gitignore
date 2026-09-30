@@ -1,0 +1,24 @@
+# Dependencies and build output
+node_modules/
+dist/
+coverage/
+*.tgz
+*.log
+
+# Angular and tool caches
+.angular/
+.vitest/
+
+# Example lockfiles (examples are built against local packages)
+examples/*/package-lock.json
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Editors and OS
+.DS_Store
+.history/
+.idea/
+.vscode/

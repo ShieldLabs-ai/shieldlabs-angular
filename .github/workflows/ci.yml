@@ -1,0 +1,140 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  NG_CLI_ANALYTICS: 'false'
+
+jobs:
+  # Until @shieldlabs/js is on npm, every job installs it from a tarball packed from its main branch.
+  core:
+    name: Pack @shieldlabs/js
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          repository: ShieldLabs-ai/shieldlabs-js
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm pack
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: shieldlabs-js
+          path: shieldlabs-js-*.tgz
+          if-no-files-found: error
+
+  test:
+    name: Lint, test and build (Angular 17, Node ${{ matrix.node-version }})
+    needs: core
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: shieldlabs-js
+          path: ${{ runner.temp }}/shieldlabs-js
+      - run: npm ci
+      - name: Install @shieldlabs/js from the tarball
+        run: npm install --no-save "$(ls "$RUNNER_TEMP"/shieldlabs-js/shieldlabs-js-*.tgz)"
+      - run: npm run lint
+      - run: npm run test:coverage
+      - run: npm run build
+
+  angular:
+    name: Test and build (Angular ${{ matrix.angular }}, Node ${{ matrix.node-version }})
+    needs: core
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - angular: 18
+            node-version: 20
+          - angular: 19
+            node-version: 22
+          - angular: 20
+            node-version: 22
+          - angular: 21
+            node-version: 24
+          - angular: 22
+            node-version: 24
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: shieldlabs-js
+          path: ${{ runner.temp }}/shieldlabs-js
+      - run: npm ci
+      - name: Swap in Angular ${{ matrix.angular }} and install @shieldlabs/js
+        run: npm run use-angular -- ${{ matrix.angular }} "$(ls "$RUNNER_TEMP"/shieldlabs-js/shieldlabs-js-*.tgz)"
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+  example:
+    name: Build examples/standalone against the packed package
+    needs: core
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: shieldlabs-js
+          path: ${{ runner.temp }}/shieldlabs-js
+      - run: npm ci
+      - name: Install @shieldlabs/js from the tarball
+        run: npm install --no-save "$(ls "$RUNNER_TEMP"/shieldlabs-js/shieldlabs-js-*.tgz)"
+      - run: npm run build
+      - run: npm pack ./dist
+      - name: Build the example
+        working-directory: examples/standalone
+        run: |
+          npm install --no-save --no-package-lock ../../shieldlabs-angular-*.tgz "$(ls "$RUNNER_TEMP"/shieldlabs-js/shieldlabs-js-*.tgz)"
+          npm run build
+
+  audit:
+    name: Audit dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 22
+      # Runtime dependencies: no advisories. Development dependencies: only the allowlisted ones.
+      - run: npm run audit:deps

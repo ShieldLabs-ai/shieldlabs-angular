@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "declarationMap": false,
+    "inlineSources": true,
+    "sourceMap": true,
+    "types": []
+  },
+  "angularCompilerOptions": {
+    "compilationMode": "partial"
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
+}

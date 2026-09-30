@@ -1,0 +1,84 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+env:
+  NG_CLI_ANALYTICS: 'false'
+
+jobs:
+  build:
+    name: Check and build the package
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: shieldlabs-angular
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          path: shieldlabs-angular
+          persist-credentials: false
+      # Until @shieldlabs/js is on npm, the checks install it from a tarball packed next to this repo.
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          repository: ShieldLabs-ai/shieldlabs-js
+          ref: main
+          path: shieldlabs-js
+          persist-credentials: false
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            shieldlabs-angular/package-lock.json
+            shieldlabs-js/package-lock.json
+      - name: Check that the tag matches package.json
+        run: test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
+      - name: Pack @shieldlabs/js
+        working-directory: shieldlabs-js
+        run: npm ci && npm run build && npm pack
+      - run: npm ci
+      - run: npm install --no-save ../shieldlabs-js/shieldlabs-js-*.tgz
+      - run: npm run lint
+      - run: npm run test:coverage
+      - run: npm run build
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: package
+          path: shieldlabs-angular/dist
+          if-no-files-found: error
+
+  publish:
+    name: Publish to npm
+    needs: build
+    runs-on: ubuntu-latest
+    # Add required reviewers to this environment in the repository settings to approve each release.
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write # npm provenance
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: package
+          path: dist
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      # Safe to re-run: a version that is already on npm is not published again.
+      - name: Publish dist/
+        run: |
+          name="$(node -p "require('./dist/package.json').name")"
+          version="$(node -p "require('./dist/package.json').version")"
+          if [ "$(npm view "$name@$version" version 2>/dev/null)" = "$version" ]; then
+            echo "$name@$version is already on npm, nothing to publish."
+            exit 0
+          fi
+          npm publish ./dist --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
