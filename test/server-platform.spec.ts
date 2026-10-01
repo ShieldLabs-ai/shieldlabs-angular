@@ -1,14 +1,14 @@
 import { Component, PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { load, ShieldLabsError } from '@shieldlabs/js';
+import { load, ShieldLabsError } from '@shieldlabs-ai/js';
 import { describe, expect, it, vi } from 'vitest';
 
 import { injectIdentify, injectShieldLabs, provideShieldLabs } from '../src/public-api';
 import { flush, PUBLIC_KEY } from './support/fake-agent';
 import { EmptyHost, render } from './support/harness';
 
-vi.mock('@shieldlabs/js', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('@shieldlabs/js')>()),
+vi.mock('@shieldlabs-ai/js', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@shieldlabs-ai/js')>()),
   load: vi.fn(),
 }));
 

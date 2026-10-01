@@ -1,5 +1,5 @@
 // A stand-in for the hosted ShieldLabs agent module in the loader tests. It has the four exports that
-// @shieldlabs/js calls and answers like the agent: through `onInitialized` inside the options object,
+// @shieldlabs-ai/js calls and answers like the agent: through `onInitialized` inside the options object,
 // once per call and asynchronously, with one frozen object. The tests steer it and read what it saw
 // through `globalThis.__shieldlabsTestAgent` (see test/shieldlabs-js.loader.spec.ts).
 const url = new URL(import.meta.url).searchParams.get('url');

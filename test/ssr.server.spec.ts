@@ -1,14 +1,14 @@
 import { Component, type ApplicationRef } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideServerRendering, renderApplication } from '@angular/platform-server';
-import { load } from '@shieldlabs/js';
+import { load } from '@shieldlabs-ai/js';
 import { describe, expect, it, vi } from 'vitest';
 
 import { injectIdentify, injectShieldLabs, provideShieldLabs } from '../src/public-api';
 import { PUBLIC_KEY } from './support/fake-agent';
 
-vi.mock('@shieldlabs/js', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('@shieldlabs/js')>()),
+vi.mock('@shieldlabs-ai/js', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@shieldlabs-ai/js')>()),
   load: vi.fn(),
 }));
 

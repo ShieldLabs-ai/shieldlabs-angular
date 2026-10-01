@@ -1,14 +1,14 @@
 import { Component, ErrorHandler, NgZone, effect } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { load, ShieldLabsError, type IdentifyOptions, type ShieldLabsAgent } from '@shieldlabs/js';
+import { load, ShieldLabsError, type IdentifyOptions, type ShieldLabsAgent } from '@shieldlabs-ai/js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { injectIdentify, injectShieldLabs } from '../src/public-api';
 import { deferred, fakeHandle, flush } from './support/fake-agent';
 import { EmptyHost, render, setup } from './support/harness';
 
-vi.mock('@shieldlabs/js', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('@shieldlabs/js')>()),
+vi.mock('@shieldlabs-ai/js', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@shieldlabs-ai/js')>()),
   load: vi.fn(),
 }));
 
@@ -149,7 +149,7 @@ describe('injectShieldLabs() calls', () => {
     expect(shieldlabs.error()).toBeNull();
   });
 
-  it('keeps a ShieldLabsError from another copy of @shieldlabs/js as it is', async () => {
+  it('keeps a ShieldLabsError from another copy of @shieldlabs-ai/js as it is', async () => {
     const harness = setup();
     const shieldlabs = inject();
     await harness.loaded();
@@ -279,7 +279,7 @@ describe('the timeout of a call that waits for the agent', () => {
     const notAnObject = shieldlabs.check('hid_1' as unknown as IdentifyOptions);
     await harness.ready();
     await Promise.all([invalid, notAnObject]);
-    // @shieldlabs/js rejects both with invalid_options; the wait used the default timeout.
+    // @shieldlabs-ai/js rejects both with invalid_options; the wait used the default timeout.
     expect(harness.agent.identify).toHaveBeenCalledWith({ timeout: -5 });
     expect(harness.agent.check).toHaveBeenCalledWith('hid_1');
   });
@@ -307,7 +307,7 @@ describe('injectShieldLabs().getAgent()', () => {
     expect(load).toHaveBeenCalledTimes(1);
   });
 
-  it('gives an agent whose calls go to the agent of @shieldlabs/js outside the Angular zone', async () => {
+  it('gives an agent whose calls go to the agent of @shieldlabs-ai/js outside the Angular zone', async () => {
     const harness = setup();
     const shieldlabs = inject();
     await harness.loaded();

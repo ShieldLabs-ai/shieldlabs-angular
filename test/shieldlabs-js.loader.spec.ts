@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { injectIdentify, injectShieldLabs, provideShieldLabs, type ShieldLabsOptions, type ShieldLabsRef } from '../src/public-api';
 import { EmptyHost, render } from './support/harness';
 
-// Nothing is mocked in this file: provideShieldLabs() calls load() of the installed @shieldlabs/js,
+// Nothing is mocked in this file: provideShieldLabs() calls load() of the installed @shieldlabs-ai/js,
 // which imports the agent URL with a native import(). The module hooks registered by
 // test/setup/cdn-agent.mjs answer that import with test/support/cdn-agent.mjs, a stand-in for the
 // hosted agent that records every import and call in this registry.
@@ -35,7 +35,7 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{1
 let keys = 0;
 
 /**
- * Configures TestBed with a Public Key of its own: Node.js and @shieldlabs/js keep every imported
+ * Configures TestBed with a Public Key of its own: Node.js and @shieldlabs-ai/js keep every imported
  * agent URL for the rest of the file, so each test imports a fresh one.
  */
 function configure(options: Partial<ShieldLabsOptions> = {}): string {
@@ -65,7 +65,7 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe('with the real @shieldlabs/js loader', () => {
+describe('with the real @shieldlabs-ai/js loader', () => {
   it('imports the agent from the CDN once, after the first render, and identifies nothing by itself', async () => {
     const publicKey = configure();
     const Status = Component({ selector: 'sl-status', standalone: true, template: 'status: {{ shieldlabs.status() }}' })(
@@ -244,7 +244,7 @@ describe('with the real @shieldlabs/js loader', () => {
     await expect(identification.identify()).resolves.toBeNull();
     expect(identification.error()?.code).toBe('not_initialized');
     await expect(shieldlabs.identify()).rejects.toMatchObject({ code: 'not_initialized' });
-    // As check() of @shieldlabs/js does for an agent that did not start a check.
+    // As check() of @shieldlabs-ai/js does for an agent that did not start a check.
     await expect(shieldlabs.check()).resolves.toBeNull();
     expect(agent.imports).toEqual([]);
 

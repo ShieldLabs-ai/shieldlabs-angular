@@ -1,14 +1,14 @@
 import { Component, createEnvironmentInjector, EnvironmentInjector, NgModule, runInInjectionContext } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { load, ShieldLabsError, type ShieldLabsAgent } from '@shieldlabs/js';
+import { load, ShieldLabsError, type ShieldLabsAgent } from '@shieldlabs-ai/js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { injectIdentify, injectShieldLabs, provideShieldLabs, type ShieldLabsOptions } from '../src/public-api';
 import { deferred, fakeAgent, flush, PUBLIC_KEY } from './support/fake-agent';
 import { EmptyHost, render, setup } from './support/harness';
 
-vi.mock('@shieldlabs/js', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('@shieldlabs/js')>()),
+vi.mock('@shieldlabs-ai/js', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@shieldlabs-ai/js')>()),
   load: vi.fn(),
 }));
 
@@ -71,7 +71,7 @@ describe('provideShieldLabs', () => {
     });
   });
 
-  it('passes every other option to load(), also options that later versions of @shieldlabs/js add', async () => {
+  it('passes every other option to load(), also options that later versions of @shieldlabs-ai/js add', async () => {
     const future = { futureLoadOption: 'on' } as unknown as Partial<ShieldLabsOptions>;
     setup({ timeout: undefined, checkOnLoad: false, autoLoad: true, ...future });
     await render(EmptyHost);
@@ -111,7 +111,7 @@ describe('provideShieldLabs', () => {
       code: 'not_initialized',
       message: 'identify() needs the agent, which is not loaded: with autoLoad: false, call load() of injectShieldLabs() first.',
     });
-    // Like check() of @shieldlabs/js, which resolves null when the agent is not initialized.
+    // Like check() of @shieldlabs-ai/js, which resolves null when the agent is not initialized.
     await expect(shieldlabs.check()).resolves.toBeNull();
     await expect(shieldlabs.check({ userId: 'hid_1', timeout: 60000 })).resolves.toBeNull();
     await expect(identification.identify()).resolves.toBeNull();
@@ -168,7 +168,7 @@ describe('provideShieldLabs', () => {
     expect(vi.getTimerCount()).toBe(0);
     expect(load).not.toHaveBeenCalled();
 
-    // After load() it waits for the load itself (which @shieldlabs/js limits), with no timer of its own.
+    // After load() it waits for the load itself (which @shieldlabs-ai/js limits), with no timer of its own.
     shieldlabs.load();
     await vi.advanceTimersByTimeAsync(60_000);
     expect(outcome).toBeUndefined();

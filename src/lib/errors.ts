@@ -1,10 +1,10 @@
-import { ShieldLabsError, type ShieldLabsErrorCode } from '@shieldlabs/js';
+import { ShieldLabsError, type ShieldLabsErrorCode } from '@shieldlabs-ai/js';
 
 function noop(): void {
   // Handled here so that an ignored promise cannot end in an unhandled rejection.
 }
 
-/** `instanceof`, plus a shape check in case an app ends up with two copies of `@shieldlabs/js`. */
+/** `instanceof`, plus a shape check in case an app ends up with two copies of `@shieldlabs-ai/js`. */
 export function isShieldLabsError(value: unknown): value is ShieldLabsError {
   if (value instanceof ShieldLabsError) return true;
   return value instanceof Error && value.name === 'ShieldLabsError' && typeof (value as { code?: unknown }).code === 'string';

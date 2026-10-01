@@ -1,4 +1,4 @@
-import type { IdentifyOptions, IdentifyResult, InteractionIdentifier, ShieldLabsAgent } from '@shieldlabs/js';
+import type { IdentifyOptions, IdentifyResult, InteractionIdentifier, ShieldLabsAgent } from '@shieldlabs-ai/js';
 import { vi, type Mock } from 'vitest';
 
 /** A placeholder Public Key in the issued format (32 lowercase hex characters). */
@@ -38,7 +38,7 @@ function answer(options?: IdentifyOptions): IdentifyResult {
   return { requestId: nextRequestId(), userId: options?.userId ?? null };
 }
 
-/** A stand-in for the agent that `load()` of `@shieldlabs/js` resolves. */
+/** A stand-in for the agent that `load()` of `@shieldlabs-ai/js` resolves. */
 export function fakeAgent(): FakeAgent {
   return {
     identify: vi.fn((options?: IdentifyOptions) => Promise.resolve(answer(options))),

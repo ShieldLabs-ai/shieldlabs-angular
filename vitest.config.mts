@@ -24,7 +24,7 @@ export default defineConfig({
         },
       },
       {
-        // The real @shieldlabs/js loader (not mocked), with the agent module served by Node.js
+        // The real @shieldlabs-ai/js loader (not mocked), with the agent module served by Node.js
         // module hooks from a local stand-in.
         extends: true,
         test: {

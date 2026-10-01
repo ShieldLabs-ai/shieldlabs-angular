@@ -1,7 +1,7 @@
 import type { Signal } from '@angular/core';
-import type { IdentifyOptions, IdentifyResult, LoadOptions, ShieldLabsAgent, ShieldLabsError } from '@shieldlabs/js';
+import type { IdentifyOptions, IdentifyResult, LoadOptions, ShieldLabsAgent, ShieldLabsError } from '@shieldlabs-ai/js';
 
-/** Options of {@link provideShieldLabs}: the `load()` options of `@shieldlabs/js` plus `checkOnLoad` and `autoLoad`. */
+/** Options of {@link provideShieldLabs}: the `load()` options of `@shieldlabs-ai/js` plus `checkOnLoad` and `autoLoad`. */
 export interface ShieldLabsOptions extends LoadOptions {
   /**
    * Runs `check()` once when the agent becomes ready, for passive monitoring of the visit. `true`
@@ -53,7 +53,7 @@ export interface ShieldLabsRef {
    */
   load(): void;
   /**
-   * The loaded agent of `@shieldlabs/js`, for example for `identifyOnInteraction()`. Starts loading
+   * The loaded agent of `@shieldlabs-ai/js`, for example for `identifyOnInteraction()`. Starts loading
    * like `identify()`; with `autoLoad: false` it waits until `load()` is called. Its calls run outside
    * the Angular zone. Rejects with the `ShieldLabsError` of a failed load, and with
    * `unsupported_environment` during server-side rendering.

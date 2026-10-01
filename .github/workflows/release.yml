@@ -22,7 +22,7 @@ jobs:
         with:
           path: shieldlabs-angular
           persist-credentials: false
-      # Until @shieldlabs/js is on npm, the checks install it from a tarball packed next to this repo.
+      # Until @shieldlabs-ai/js is on npm, the checks install it from a tarball packed next to this repo.
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           repository: ShieldLabs-ai/shieldlabs-js
@@ -38,11 +38,11 @@ jobs:
             shieldlabs-js/package-lock.json
       - name: Check that the tag matches package.json
         run: test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
-      - name: Pack @shieldlabs/js
+      - name: Pack @shieldlabs-ai/js
         working-directory: shieldlabs-js
         run: npm ci && npm run build && npm pack
       - run: npm ci
-      - run: npm install --no-save ../shieldlabs-js/shieldlabs-js-*.tgz
+      - run: npm install --no-save ../shieldlabs-js/shieldlabs-ai-js-*.tgz
       - run: npm run lint
       - run: npm run test:coverage
       - run: npm run build

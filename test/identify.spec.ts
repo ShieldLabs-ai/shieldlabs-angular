@@ -1,14 +1,14 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { load, ShieldLabsError, type IdentifyResult } from '@shieldlabs/js';
+import { load, ShieldLabsError, type IdentifyResult } from '@shieldlabs-ai/js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { injectIdentify, injectShieldLabs, type InjectIdentifyOptions } from '../src/public-api';
 import { deferred, flush } from './support/fake-agent';
 import { render, setup } from './support/harness';
 
-vi.mock('@shieldlabs/js', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('@shieldlabs/js')>()),
+vi.mock('@shieldlabs-ai/js', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@shieldlabs-ai/js')>()),
   load: vi.fn(),
 }));
 
@@ -320,7 +320,7 @@ describe('injectIdentify()', () => {
     expect(harness.agent.identify).toHaveBeenNthCalledWith(2, { timeout: 10000 });
   });
 
-  it('never shares a call with a timeout that @shieldlabs/js refuses', async () => {
+  it('never shares a call with a timeout that @shieldlabs-ai/js refuses', async () => {
     const harness = setup();
     await harness.loaded();
     const identification = inject();

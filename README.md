@@ -1,13 +1,13 @@
-# @shieldlabs/angular
+# @shieldlabs-ai/angular
 
 Angular bindings for ShieldLabs: load the agent once with `provideShieldLabs()`, read its state from
 signals and get a request ID for every protected action with `injectIdentify()`.
 
 [![CI](https://github.com/ShieldLabs-ai/shieldlabs-angular/actions/workflows/ci.yml/badge.svg)](https://github.com/ShieldLabs-ai/shieldlabs-angular/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/@shieldlabs/angular)](https://www.npmjs.com/package/@shieldlabs/angular)
+[![npm](https://img.shields.io/npm/v/@shieldlabs-ai/angular)](https://www.npmjs.com/package/@shieldlabs-ai/angular)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
 
-`@shieldlabs/angular` is a thin layer over [`@shieldlabs/js`](https://github.com/ShieldLabs-ai/shieldlabs-js),
+`@shieldlabs-ai/angular` is a thin layer over [`@shieldlabs-ai/js`](https://github.com/ShieldLabs-ai/shieldlabs-js),
 which loads the hosted ShieldLabs agent from `https://cdn.shieldlabs.ai`. It uses standalone APIs and
 signals, also works in NgModule applications, and is safe with Angular SSR and hydration.
 
@@ -35,10 +35,10 @@ bytes, and read the History API whenever your backend must have the result.
 ## Install
 
 ```bash
-npm install @shieldlabs/angular @shieldlabs/js
+npm install @shieldlabs-ai/angular @shieldlabs-ai/js
 ```
 
-`@shieldlabs/js` is a peer dependency: the loader that both packages share.
+`@shieldlabs-ai/js` is a peer dependency: the loader that both packages share.
 
 ## Quick start
 
@@ -54,7 +54,7 @@ Add the provider next to the providers that are already there:
 import { provideHttpClient } from '@angular/common/http';
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideShieldLabs } from '@shieldlabs/angular';
+import { provideShieldLabs } from '@shieldlabs-ai/angular';
 
 import { routes } from './app.routes';
 
@@ -74,7 +74,7 @@ Run an identification when the form is submitted and send the request ID with it
 // src/app/signup-form.ts
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
-import { injectIdentify } from '@shieldlabs/angular';
+import { injectIdentify } from '@shieldlabs-ai/angular';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -121,10 +121,10 @@ export class App {}
 ```
 
 `/api/signup` is your own endpoint. On your server, read the verdict for `requestId`, for example
-with [`@shieldlabs/node`](https://github.com/ShieldLabs-ai/shieldlabs-node):
+with [`@shieldlabs-ai/node`](https://github.com/ShieldLabs-ai/shieldlabs-node):
 
 ```ts
-import { ShieldLabs } from '@shieldlabs/node';
+import { ShieldLabs } from '@shieldlabs-ai/node';
 
 const shieldlabs = new ShieldLabs({ apiKey: process.env.SHIELDLABS_API_KEY! });
 
@@ -177,7 +177,7 @@ export class AppModule {}
 
 In the browser, the provider loads the agent once, right after the application first renders
 (`afterNextRender`), or earlier when a component calls `identify()`, `check()`, `getAgent()` or
-`load()` first. The import itself is memoized by `@shieldlabs/js` per agent URL and Public Key, so
+`load()` first. The import itself is memoized by `@shieldlabs-ai/js` per agent URL and Public Key, so
 the agent is loaded once per page, also with several providers or applications that use the same
 Public Key and environment. With `autoLoad: false`, nothing loads until `load()` of
 `injectShieldLabs()` is called (see [Consent](#call-budget-content-security-policy-and-consent)).
@@ -225,7 +225,7 @@ example step-up or review), never as clean.
 
 The History row of an identification appears about 1-3 seconds after `identify()` resolves, and
 your server waits for it. To keep that wait off the submit, start the identification when the user
-begins the action and use it on submit. The agent of `@shieldlabs/js` does this with
+begins the action and use it on submit. The agent of `@shieldlabs-ai/js` does this with
 `identifyOnInteraction(form)`: it starts an identification on the first focus, click or key press
 in the form. Get the agent with `getAgent()` after the first render:
 
@@ -233,7 +233,7 @@ in the form. Get the agent with `getAgent()` after the first render:
 // src/app/signup-form.ts
 import { HttpClient } from '@angular/common/http';
 import { afterNextRender, Component, DestroyRef, ElementRef, inject, signal, viewChild } from '@angular/core';
-import { injectShieldLabs, type InteractionIdentifier } from '@shieldlabs/angular';
+import { injectShieldLabs, type InteractionIdentifier } from '@shieldlabs-ai/angular';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -300,7 +300,7 @@ On the server, read the verdict with `identifications.get(requestId)` of a Shiel
 which polls the History API until the row of the identification is there (see the timing in the
 [quick start](#quick-start)):
 
-- Node.js: [`@shieldlabs/node`](https://github.com/ShieldLabs-ai/shieldlabs-node)
+- Node.js: [`@shieldlabs-ai/node`](https://github.com/ShieldLabs-ai/shieldlabs-node)
 - Python: [`shieldlabs`](https://github.com/ShieldLabs-ai/shieldlabs-python)
 - Go: [`shieldlabs-go`](https://github.com/ShieldLabs-ai/shieldlabs-go)
 - PHP: [`shieldlabs/shieldlabs-php`](https://github.com/ShieldLabs-ai/shieldlabs-php)
@@ -331,7 +331,7 @@ export class CheckoutForm {
 `userId`: `identify({ userId })`, or `identify({ userId: undefined })` (`null` works the same) for
 an anonymous call. Only options without the key use the helper's `userId`. The reserved
 values `"anonymous"`, `"fail"`, `"-1"` and `"unknown"` are rejected with `invalid_options`.
-`@shieldlabs/js` also warns once about values that look like an email address or contain `/`, `?`,
+`@shieldlabs-ai/js` also warns once about values that look like an email address or contain `/`, `?`,
 `#` or `%`: the History API looks a User HID up as a URL path segment and cannot search a value that
 contains `/`. Use a hex hash (see
 [Signed-in users](https://github.com/ShieldLabs-ai/shieldlabs-js#signed-in-users-pass-a-user-hid)).
@@ -362,7 +362,7 @@ to `'loading'`). In development mode, a load that fails because of the setup (`i
 example a wrong Public Key, or `unsupported_environment` on a page that is not a secure context) is
 also logged once with `console.warn`.
 
-`injectShieldLabs().identify()` and `.check()` are the calls of `@shieldlabs/js` without extra state:
+`injectShieldLabs().identify()` and `.check()` are the calls of `@shieldlabs-ai/js` without extra state:
 every `identify()` is a fresh identification with a new request ID, and both reject with a
 `ShieldLabsError`. Their `timeout` covers the wait for the agent and its answer, like the one of
 `injectIdentify()`. With `autoLoad: false`, until `load()` is called, `identify()` rejects at once
@@ -371,7 +371,7 @@ Use `injectIdentify()` when you want the signals.
 
 `load()` starts loading the agent now: with `autoLoad: false` it is the call that allows the agent
 to load (see [Consent](#call-budget-content-security-policy-and-consent)); otherwise it loads before
-the first render, or again after a failed load. `getAgent()` resolves the agent of `@shieldlabs/js`
+the first render, or again after a failed load. `getAgent()` resolves the agent of `@shieldlabs-ai/js`
 itself, for its `identifyOnInteraction()` (see
 [Start the identification early](#start-the-identification-early)) and its other calls, which run
 outside the Angular zone. It starts loading like `identify()`, waits for `load()` with
@@ -423,7 +423,7 @@ same way.
 
 ### Call budget, Content Security Policy and consent
 
-These rules come from the agent and are documented once, in the `@shieldlabs/js` README:
+These rules come from the agent and are documented once, in the `@shieldlabs-ai/js` README:
 
 - [Call budget](https://github.com/ShieldLabs-ai/shieldlabs-js#call-budget): identify once per
   protected action, never on every render or client-side route change; the agent runs its own
@@ -481,7 +481,7 @@ unless a test calls `load()`.
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { provideShieldLabs } from '@shieldlabs/angular';
+import { provideShieldLabs } from '@shieldlabs-ai/angular';
 
 import { App } from './app';
 
@@ -506,7 +506,7 @@ describe('App', () => {
 ```
 
 To test what a component does with the result, replace `injectIdentify()` with a fake. With Vitest,
-the test runner of `ng test` in new applications, mock `@shieldlabs/angular` in the spec file
+the test runner of `ng test` in new applications, mock `@shieldlabs-ai/angular` in the spec file
 (`jest.mock` works the same way with Jest):
 
 ```ts
@@ -520,7 +520,7 @@ import { SignupForm } from './signup-form';
 
 const identify = vi.hoisted(() => vi.fn());
 
-vi.mock('@shieldlabs/angular', () => ({
+vi.mock('@shieldlabs-ai/angular', () => ({
   injectIdentify: () => ({ result: signal(null), isLoading: signal(false), error: signal(null), identify, reset: vi.fn() }),
 }));
 
@@ -557,9 +557,9 @@ describe('SignupForm', () => {
 });
 ```
 
-Mock `@shieldlabs/angular` rather than `load()` of `@shieldlabs/js`: with the test runner of the
-Angular CLI, a mock of `@shieldlabs/js` in a spec file does not reach the import inside
-`@shieldlabs/angular`, so the real agent would be loaded.
+Mock `@shieldlabs-ai/angular` rather than `load()` of `@shieldlabs-ai/js`: with the test runner of the
+Angular CLI, a mock of `@shieldlabs-ai/js` in a spec file does not reach the import inside
+`@shieldlabs-ai/angular`, so the real agent would be loaded.
 
 ## Reference
 
@@ -568,8 +568,8 @@ Angular CLI, a mock of `@shieldlabs/js` in a spec file does not reach the import
 | `provideShieldLabs(options: ShieldLabsOptions): EnvironmentProviders` | Sets up ShieldLabs for an application or an NgModule. Loads the agent once in the browser, after the first render (with `autoLoad: false`, when `load()` is called) |
 | `injectShieldLabs(): ShieldLabsRef` | The agent state (`status`, `error`) and calls (`identify`, `check`, `load`, `getAgent`) of the closest provider |
 | `injectIdentify(options?: InjectIdentifyOptions): IdentifyRef` | An identify helper with `result`, `isLoading` and `error` signals |
-| `ShieldLabsError` | The error class of `@shieldlabs/js`, re-exported. Has `code` and optional `cause` |
-| Types | `ShieldLabsOptions`, `ShieldLabsStatus`, `ShieldLabsRef`, `InjectIdentifyOptions`, `IdentifyRef`, and from `@shieldlabs/js`: `IdentifyOptions`, `IdentifyResult`, `ShieldLabsAgent`, `InteractionIdentifier`, `ShieldLabsErrorCode` |
+| `ShieldLabsError` | The error class of `@shieldlabs-ai/js`, re-exported. Has `code` and optional `cause` |
+| Types | `ShieldLabsOptions`, `ShieldLabsStatus`, `ShieldLabsRef`, `InjectIdentifyOptions`, `IdentifyRef`, and from `@shieldlabs-ai/js`: `IdentifyOptions`, `IdentifyResult`, `ShieldLabsAgent`, `InteractionIdentifier`, `ShieldLabsErrorCode` |
 
 `injectShieldLabs()` and `injectIdentify()` need an injection context. Elsewhere, wrap the call in
 `runInInjectionContext(injector, () => injectIdentify())`. Both throw a `ShieldLabsError` with the
@@ -595,7 +595,7 @@ code `invalid_options` when no `provideShieldLabs()` is in scope.
 | `identify(options?)` | `Promise<IdentifyResult>` | Fresh identification with a new request ID. Waits for the agent; `options.timeout` covers the wait and the answer. Rejects with a `ShieldLabsError`: with `autoLoad: false`, with `not_initialized` at once until `load()` is called |
 | `check(options?)` | `Promise<IdentifyResult \| null>` | Background check, `null` when the agent skipped it, and at once with `autoLoad: false` until `load()` is called. Waits for the agent like `identify()` |
 | `load()` | `void` | Starts loading the agent: with `autoLoad: false`, the call that allows it; otherwise earlier than the first render, or again after a failed load. Does nothing while a load runs, once the agent is ready, and on the server |
-| `getAgent()` | `Promise<ShieldLabsAgent>` | The agent of `@shieldlabs/js` (`identify`, `check`, `identifyOnInteraction`), its calls outside the Angular zone. Starts loading like `identify()`; with `autoLoad: false`, waits for `load()` with no timeout of its own. Rejects with the error of a failed load, and with `unsupported_environment` on the server |
+| `getAgent()` | `Promise<ShieldLabsAgent>` | The agent of `@shieldlabs-ai/js` (`identify`, `check`, `identifyOnInteraction`), its calls outside the Angular zone. Starts loading like `identify()`; with `autoLoad: false`, waits for `load()` with no timeout of its own. Rejects with the error of a failed load, and with `unsupported_environment` on the server |
 
 `InjectIdentifyOptions`
 
@@ -630,15 +630,15 @@ Every error is a `ShieldLabsError`. Branch on `error.code`:
 The other calls reject with it. The package never retries an identification by itself: each one is
 billable. A failed agent load is retried on the next `identify()`, `check()`, `getAgent()` or
 `load()`. More detail on each code:
-[Errors in `@shieldlabs/js`](https://github.com/ShieldLabs-ai/shieldlabs-js#errors).
+[Errors in `@shieldlabs-ai/js`](https://github.com/ShieldLabs-ai/shieldlabs-js#errors).
 
 ## Compatibility
 
 - Angular 17, 18, 19, 20, 21 and 22 (`@angular/core` and `@angular/common` as peer dependencies),
   standalone and NgModule applications, zone-based and zoneless change detection, Angular SSR and
   hydration.
-- `@shieldlabs/js` 1.x as a peer dependency. Browser support and the secure-context requirement are
-  those of [`@shieldlabs/js`](https://github.com/ShieldLabs-ai/shieldlabs-js#compatibility).
+- `@shieldlabs-ai/js` 1.x as a peer dependency. Browser support and the secure-context requirement are
+  those of [`@shieldlabs-ai/js`](https://github.com/ShieldLabs-ai/shieldlabs-js#compatibility).
 - Angular Package Format (ES2022 FESM bundle with TypeScript declarations), compiled with the Angular
   17 toolchain in partial compilation mode. The package declares no components, directives or
   NgModules; it uses public Angular APIs only.
@@ -648,13 +648,13 @@ billable. A failed agent load is retried on the next `identify()`, `check()`, `g
 
 ```bash
 npm ci
-npm install --no-save ../shieldlabs-js/shieldlabs-js-1.0.0.tgz  # until @shieldlabs/js is on npm
+npm install --no-save ../shieldlabs-js/shieldlabs-ai-js-1.0.0.tgz  # until @shieldlabs-ai/js is on npm
 npm run lint                  # tsc --noEmit (strict) and ESLint
 npm test                      # Vitest: jsdom and plain Node.js (server-side rendering)
 npm run test:coverage
 npm run build                 # ng-packagr, output in dist/
 npm run audit:deps            # npm audit: none in runtime dependencies, allowlisted ones in dev
-npm run use-angular -- 22 ../shieldlabs-js/shieldlabs-js-1.0.0.tgz   # test against another major
+npm run use-angular -- 22 ../shieldlabs-js/shieldlabs-ai-js-1.0.0.tgz   # test against another major
 ```
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md). Documentation: <https://docs.shieldlabs.ai>. Analytics

@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to `@shieldlabs/angular` are documented in this file. The format follows
+All notable changes to `@shieldlabs-ai/angular` are documented in this file. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the package uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
@@ -12,7 +12,7 @@ All notable changes to `@shieldlabs/angular` are documented in this file. The fo
 
 - `provideShieldLabs(options)`: environment providers for `bootstrapApplication` and for the
   `providers` of an NgModule. In the browser, loads the agent once after the first render with
-  `load()` of `@shieldlabs/js`. Options: `checkOnLoad`, `autoLoad` and every `load()` option
+  `load()` of `@shieldlabs-ai/js`. Options: `checkOnLoad`, `autoLoad` and every `load()` option
   (`publicKey`, `environment`, `scriptUrl`, `timeout`), which are passed to `load()` as they are.
 - In development mode, a load that fails because of the setup (`invalid_options`, for example a
   wrong Public Key, or `unsupported_environment` on a page that is not a secure context) is logged
@@ -22,7 +22,7 @@ All notable changes to `@shieldlabs/angular` are documented in this file. The fo
   reject with a `ShieldLabsError`.
 - `injectShieldLabs().load()`: starts loading the agent now. With `autoLoad: false` it is the call
   that allows the agent to load; after a failed load it loads again.
-- `injectShieldLabs().getAgent()`: resolves the agent of `@shieldlabs/js`, for example to start an
+- `injectShieldLabs().getAgent()`: resolves the agent of `@shieldlabs-ai/js`, for example to start an
   identification on the first interaction with a form (`identifyOnInteraction()`) before a full-page
   form post. Its calls run outside the Angular zone. With `autoLoad: false` it waits for `load()`,
   with no timeout of its own.
@@ -53,7 +53,7 @@ All notable changes to `@shieldlabs/angular` are documented in this file. The fo
   `unsupported_environment`, and no signal changes.
 - The agent runs outside the Angular zone and signal updates re-enter it; zone-based and zoneless
   applications are supported.
-- Every error is a `ShieldLabsError` (re-exported from `@shieldlabs/js`, with the `ShieldLabsAgent`
+- Every error is a `ShieldLabsError` (re-exported from `@shieldlabs-ai/js`, with the `ShieldLabsAgent`
   and `InteractionIdentifier` types). A failed agent load is retried on the next call.
 - Support for Angular 17 to 22, packaged in the Angular Package Format with ng-packagr.
 - Example: `examples/standalone`, a zoneless Angular signup form.

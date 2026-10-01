@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { injectIdentify } from '@shieldlabs/angular';
+import { injectIdentify } from '@shieldlabs-ai/angular';
 import { firstValueFrom } from 'rxjs';
 
 @Component({

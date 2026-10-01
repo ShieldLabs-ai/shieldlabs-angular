@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { injectShieldLabs } from '@shieldlabs/angular';
+import { injectShieldLabs } from '@shieldlabs-ai/angular';
 
 import { SignupForm } from './signup-form';
 

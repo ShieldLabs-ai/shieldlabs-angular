@@ -1,4 +1,4 @@
-# Contributing to @shieldlabs/angular
+# Contributing to @shieldlabs-ai/angular
 
 Thank you for improving the ShieldLabs Angular bindings.
 
@@ -9,12 +9,12 @@ toolchain). Angular 22 needs Node.js 22.22 or 24.15 or later.
 
 ```bash
 npm ci
-npm install --no-save <path to shieldlabs-js-1.0.0.tgz>
+npm install --no-save <path to shieldlabs-ai-js-1.0.0.tgz>
 ```
 
-### Until @shieldlabs/js is on npm
+### Until @shieldlabs-ai/js is on npm
 
-`@shieldlabs/js` is a peer dependency that is not published yet, so npm cannot resolve it from the
+`@shieldlabs-ai/js` is a peer dependency that is not published yet, so npm cannot resolve it from the
 registry. The loader is installed from a local tarball instead: build it in a working copy of
 [shieldlabs-js](https://github.com/ShieldLabs-ai/shieldlabs-js) with
 `npm ci && npm run build && npm pack`, and install it again after every `npm ci`, which removes it.
@@ -23,15 +23,15 @@ Never commit a `file:` dependency or a tarball.
 The committed `.npmrc` makes this work with plain npm commands:
 
 - `legacy-peer-deps=true`: `npm install` and `npm ci` do not try to install peer dependencies (they
-  would fail with a 404 for `@shieldlabs/js`). Because of this setting, the dependencies of the
+  would fail with a 404 for `@shieldlabs-ai/js`). Because of this setting, the dependencies of the
   Angular packages are listed explicitly in `devDependencies`.
 - `save-dev=true`: `npm install --no-save <tarball>` puts the loader into `node_modules`. With
   `legacy-peer-deps` alone, npm leaves out a package that is listed as a peer dependency, even when
   it is named on the command line. The setting also makes `npm install <package>` add a dev
   dependency by default: pass `--save-prod` to add or update a runtime dependency.
 
-These settings apply to development only: the published package declares `@shieldlabs/js` as a
-regular (required) peer dependency, and the workflows keep working after `@shieldlabs/js` 1.0.0 is
+These settings apply to development only: the published package declares `@shieldlabs-ai/js` as a
+regular (required) peer dependency, and the workflows keep working after `@shieldlabs-ai/js` 1.0.0 is
 on npm. Once it is, the setup can be simplified: remove `.npmrc`, regenerate `package-lock.json` and
 drop the tarball steps (here, in the README, in `examples/standalone/README.md` and in the
 workflows).
@@ -54,8 +54,8 @@ published); add an entry only with the reason why it does not reach the publishe
 
 The tests run in three Vitest projects:
 
-- `browser`: jsdom and TestBed, with `load()` of `@shieldlabs/js` mocked.
-- `loader`: jsdom and TestBed with the real `@shieldlabs/js`. Its native `import()` of the agent URL
+- `browser`: jsdom and TestBed, with `load()` of `@shieldlabs-ai/js` mocked.
+- `loader`: jsdom and TestBed with the real `@shieldlabs-ai/js`. Its native `import()` of the agent URL
   is answered by Node.js module hooks (`test/support/cdn-hooks.mjs`) with a local stand-in for the
   agent (`test/support/cdn-agent.mjs`).
 - `server`: plain Node.js without `window` or `document`, rendering with `@angular/platform-server`.
@@ -67,7 +67,7 @@ of a newer compiler is not meant to be used by older applications. To run the te
 against another major, swap the toolchain in `node_modules` (package files stay unchanged):
 
 ```bash
-npm run use-angular -- 22 <path to shieldlabs-js-1.0.0.tgz>
+npm run use-angular -- 22 <path to shieldlabs-ai-js-1.0.0.tgz>
 npm test && npm run build
 npm ci                  # back to Angular 17, then install the tarball again
 ```
@@ -77,7 +77,7 @@ CI runs the tests and the build on every supported major (17 to 22) and builds
 
 ## Guidelines
 
-- The package stays a thin layer over `@shieldlabs/js`: it never imports the agent itself and never
+- The package stays a thin layer over `@shieldlabs-ai/js`: it never imports the agent itself and never
   touches `window` or `document`. Loading starts in the browser only (`isPlatformBrowser`,
   `afterNextRender`).
 - No decorators, components or NgModules in `src/`: plain functions and an `InjectionToken`. This

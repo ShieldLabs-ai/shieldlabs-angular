@@ -1,6 +1,6 @@
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideZonelessChangeDetection, type ApplicationConfig } from '@angular/core';
-import { provideShieldLabs } from '@shieldlabs/angular';
+import { provideShieldLabs } from '@shieldlabs-ai/angular';
 
 export const appConfig: ApplicationConfig = {
   providers: [

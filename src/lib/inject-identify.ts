@@ -1,5 +1,5 @@
 import { afterNextRender, assertInInjectionContext, inject, Injector, signal, untracked } from '@angular/core';
-import type { IdentifyOptions, IdentifyResult, ShieldLabsError } from '@shieldlabs/js';
+import type { IdentifyOptions, IdentifyResult, ShieldLabsError } from '@shieldlabs-ai/js';
 
 import { toShieldLabsError } from './errors';
 import { injectState } from './state';
@@ -24,8 +24,8 @@ function readUserId(value: InjectIdentifyOptions['userId']): string | undefined 
 
 /**
  * The timeout that bounds a call: its own `timeout`, else `fallback`, the timeout of the provider. As
- * in `@shieldlabs/js`, only an omitted timeout takes the fallback. Any other value stays as it is, so
- * an invalid one is never shared with a valid call and `@shieldlabs/js` still reports it.
+ * in `@shieldlabs-ai/js`, only an omitted timeout takes the fallback. Any other value stays as it is, so
+ * an invalid one is never shared with a valid call and `@shieldlabs-ai/js` still reports it.
  */
 function boundOf(timeout: unknown, fallback: number): unknown {
   return timeout === undefined ? fallback : timeout;

@@ -1,5 +1,5 @@
 {
-  "name": "@shieldlabs/angular",
+  "name": "@shieldlabs-ai/angular",
   "version": "1.0.0",
   "description": "Angular bindings for ShieldLabs device intelligence: a provider that loads the agent once, signals for its state and an identify helper that returns a request ID for your backend.",
   "keywords": [
@@ -39,7 +39,7 @@
   "peerDependencies": {
     "@angular/common": "^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0 || ^22.0.0",
     "@angular/core": "^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0 || ^22.0.0",
-    "@shieldlabs/js": "^1.0.0"
+    "@shieldlabs-ai/js": "^1.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"

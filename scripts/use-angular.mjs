@@ -3,7 +3,7 @@
 //
 //   node scripts/use-angular.mjs <major> [more packages or tarballs to install at the same time]
 //
-// npm removes packages installed with --no-save on the next install, so pass the @shieldlabs/js
+// npm removes packages installed with --no-save on the next install, so pass the @shieldlabs-ai/js
 // tarball here as well. `npm ci` restores the default toolchain (Angular 17).
 import { spawnSync } from 'node:child_process';
 

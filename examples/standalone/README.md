@@ -23,7 +23,7 @@ npx ng build --define "SHIELDLABS_PUBLIC_KEY='$SHIELDLABS_PUBLIC_KEY'"
 The form posts JSON to `/api/signup`. Point it at your server (for example with
 `ng serve --proxy-config`), which reads the verdict for `requestId` with a ShieldLabs server SDK,
 for example `identifications.get(requestId)` in
-[`@shieldlabs/node`](https://github.com/ShieldLabs-ai/shieldlabs-node).
+[`@shieldlabs-ai/node`](https://github.com/ShieldLabs-ai/shieldlabs-node).
 
 ShieldLabs accepts identifications only from registered domains. On `localhost` the request ID
 still reaches the page, but no identification is recorded. Serve the example from a registered
@@ -31,16 +31,16 @@ development domain to see results in the [analytics dashboard](https://app.shiel
 
 ## Build against local copies of the packages
 
-Inside the `shieldlabs-angular` repository, before `@shieldlabs/angular` and `@shieldlabs/js` are
-on npm (build and pack `@shieldlabs/js` in its own repository first):
+Inside the `shieldlabs-angular` repository, before `@shieldlabs-ai/angular` and `@shieldlabs-ai/js` are
+on npm (build and pack `@shieldlabs-ai/js` in its own repository first):
 
 ```bash
 # repository root
 npm ci
-npm install --no-save ../shieldlabs-js/shieldlabs-js-1.0.0.tgz
+npm install --no-save ../shieldlabs-js/shieldlabs-ai-js-1.0.0.tgz
 npm run build
 npm pack ./dist
 cd examples/standalone
-npm install --no-save --no-package-lock ../../shieldlabs-angular-1.0.0.tgz ../../../shieldlabs-js/shieldlabs-js-1.0.0.tgz
+npm install --no-save --no-package-lock ../../shieldlabs-ai-angular-1.0.0.tgz ../../../shieldlabs-js/shieldlabs-ai-js-1.0.0.tgz
 npm run build
 ```

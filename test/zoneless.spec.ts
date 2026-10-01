@@ -6,8 +6,8 @@ import { describe, expect, it, vi } from 'vitest';
 import { injectIdentify, injectShieldLabs } from '../src/public-api';
 import { setup } from './support/harness';
 
-vi.mock('@shieldlabs/js', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('@shieldlabs/js')>()),
+vi.mock('@shieldlabs-ai/js', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@shieldlabs-ai/js')>()),
   load: vi.fn(),
 }));
 

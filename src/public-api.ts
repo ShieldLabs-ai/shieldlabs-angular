@@ -1,5 +1,5 @@
 /*
- * Public API of @shieldlabs/angular.
+ * Public API of @shieldlabs-ai/angular.
  */
 export { provideShieldLabs } from './lib/provide-shieldlabs';
 export { injectShieldLabs } from './lib/inject-shieldlabs';
@@ -12,12 +12,12 @@ export type {
   ShieldLabsStatus,
 } from './lib/types';
 
-// Re-exported from @shieldlabs/js (a peer dependency), so apps can import everything from here.
-export { ShieldLabsError } from '@shieldlabs/js';
+// Re-exported from @shieldlabs-ai/js (a peer dependency), so apps can import everything from here.
+export { ShieldLabsError } from '@shieldlabs-ai/js';
 export type {
   IdentifyOptions,
   IdentifyResult,
   InteractionIdentifier,
   ShieldLabsAgent,
   ShieldLabsErrorCode,
-} from '@shieldlabs/js';
+} from '@shieldlabs-ai/js';

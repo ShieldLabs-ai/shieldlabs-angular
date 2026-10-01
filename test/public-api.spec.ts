@@ -11,18 +11,18 @@ describe('public API', () => {
     expect(typeof api.injectIdentify).toBe('function');
   });
 
-  it('re-exports the ShieldLabsError of @shieldlabs/js', async () => {
-    const core = await import('@shieldlabs/js');
+  it('re-exports the ShieldLabsError of @shieldlabs-ai/js', async () => {
+    const core = await import('@shieldlabs-ai/js');
     expect(api.ShieldLabsError).toBe(core.ShieldLabsError);
   });
 });
 
 describe('package.json', () => {
-  it('declares @shieldlabs/js as a required peer dependency, next to Angular 17 to 22', () => {
+  it('declares @shieldlabs-ai/js as a required peer dependency, next to Angular 17 to 22', () => {
     expect(manifest.peerDependencies).toEqual({
       '@angular/common': '^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0 || ^22.0.0',
       '@angular/core': '^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0 || ^22.0.0',
-      '@shieldlabs/js': '^1.0.0',
+      '@shieldlabs-ai/js': '^1.0.0',
     });
     expect(manifest).not.toHaveProperty('peerDependenciesMeta');
     expect(Object.keys(manifest.dependencies)).toEqual(['tslib']);

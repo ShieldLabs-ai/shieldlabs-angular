@@ -1,6 +1,6 @@
 import { Component, type EnvironmentProviders, type Provider, type Type } from '@angular/core';
 import { TestBed, type ComponentFixture } from '@angular/core/testing';
-import { load, type ShieldLabsAgent } from '@shieldlabs/js';
+import { load, type ShieldLabsAgent } from '@shieldlabs-ai/js';
 import { vi } from 'vitest';
 
 import { provideShieldLabs, type ShieldLabsOptions } from '../../src/public-api';
@@ -34,7 +34,7 @@ export async function render<T>(component: Type<T>): Promise<ComponentFixture<T>
 
 /**
  * Configures TestBed with `provideShieldLabs()` and a `load()` mock (the test file mocks
- * `@shieldlabs/js`) that resolves the fake agent once `ready()` is called.
+ * `@shieldlabs-ai/js`) that resolves the fake agent once `ready()` is called.
  */
 export function setup(
   options: Partial<ShieldLabsOptions> = {},

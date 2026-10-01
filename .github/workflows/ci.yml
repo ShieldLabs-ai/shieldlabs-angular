@@ -12,9 +12,9 @@ env:
   NG_CLI_ANALYTICS: 'false'
 
 jobs:
-  # Until @shieldlabs/js is on npm, every job installs it from a tarball packed from its main branch.
+  # Until @shieldlabs-ai/js is on npm, every job installs it from a tarball packed from its main branch.
   core:
-    name: Pack @shieldlabs/js
+    name: Pack @shieldlabs-ai/js
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
@@ -32,7 +32,7 @@ jobs:
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: shieldlabs-js
-          path: shieldlabs-js-*.tgz
+          path: shieldlabs-ai-js-*.tgz
           if-no-files-found: error
 
   test:
@@ -56,8 +56,8 @@ jobs:
           name: shieldlabs-js
           path: ${{ runner.temp }}/shieldlabs-js
       - run: npm ci
-      - name: Install @shieldlabs/js from the tarball
-        run: npm install --no-save "$(ls "$RUNNER_TEMP"/shieldlabs-js/shieldlabs-js-*.tgz)"
+      - name: Install @shieldlabs-ai/js from the tarball
+        run: npm install --no-save "$(ls "$RUNNER_TEMP"/shieldlabs-js/shieldlabs-ai-js-*.tgz)"
       - run: npm run lint
       - run: npm run test:coverage
       - run: npm run build
@@ -93,8 +93,8 @@ jobs:
           name: shieldlabs-js
           path: ${{ runner.temp }}/shieldlabs-js
       - run: npm ci
-      - name: Swap in Angular ${{ matrix.angular }} and install @shieldlabs/js
-        run: npm run use-angular -- ${{ matrix.angular }} "$(ls "$RUNNER_TEMP"/shieldlabs-js/shieldlabs-js-*.tgz)"
+      - name: Swap in Angular ${{ matrix.angular }} and install @shieldlabs-ai/js
+        run: npm run use-angular -- ${{ matrix.angular }} "$(ls "$RUNNER_TEMP"/shieldlabs-js/shieldlabs-ai-js-*.tgz)"
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
@@ -116,14 +116,14 @@ jobs:
           name: shieldlabs-js
           path: ${{ runner.temp }}/shieldlabs-js
       - run: npm ci
-      - name: Install @shieldlabs/js from the tarball
-        run: npm install --no-save "$(ls "$RUNNER_TEMP"/shieldlabs-js/shieldlabs-js-*.tgz)"
+      - name: Install @shieldlabs-ai/js from the tarball
+        run: npm install --no-save "$(ls "$RUNNER_TEMP"/shieldlabs-js/shieldlabs-ai-js-*.tgz)"
       - run: npm run build
       - run: npm pack ./dist
       - name: Build the example
         working-directory: examples/standalone
         run: |
-          npm install --no-save --no-package-lock ../../shieldlabs-angular-*.tgz "$(ls "$RUNNER_TEMP"/shieldlabs-js/shieldlabs-js-*.tgz)"
+          npm install --no-save --no-package-lock ../../shieldlabs-ai-angular-*.tgz "$(ls "$RUNNER_TEMP"/shieldlabs-js/shieldlabs-ai-js-*.tgz)"
           npm run build
 
   audit:

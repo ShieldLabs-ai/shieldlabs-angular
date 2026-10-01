@@ -19,7 +19,7 @@ import {
   type LoadOptions,
   type ShieldLabsAgent,
   type ShieldLabsErrorCode,
-} from '@shieldlabs/js';
+} from '@shieldlabs-ai/js';
 
 import {
   handled,
@@ -35,10 +35,10 @@ import type { ShieldLabsOptions, ShieldLabsRef, ShieldLabsStatus } from './types
 /** Internal: the agent state of one `provideShieldLabs()` call. Not exported from the package. */
 export const SHIELDLABS_STATE = new InjectionToken<ShieldLabsState>('ShieldLabsState');
 
-/** Milliseconds a call may take when neither the call nor the provider sets a timeout (as in `@shieldlabs/js`). */
+/** Milliseconds a call may take when neither the call nor the provider sets a timeout (as in `@shieldlabs-ai/js`). */
 const DEFAULT_TIMEOUT = 10000;
 
-/** The largest timeout that `@shieldlabs/js` (and `setTimeout`) accepts. */
+/** The largest timeout that `@shieldlabs-ai/js` (and `setTimeout`) accepts. */
 const MAX_TIMEOUT = 2147483647;
 
 /** Load errors caused by the setup rather than by the visitor: logged once in development mode. */
@@ -60,7 +60,7 @@ function isObject(value: unknown): value is CallFields {
   return typeof value === 'object' && value !== null;
 }
 
-/** A timeout that `@shieldlabs/js` accepts. */
+/** A timeout that `@shieldlabs-ai/js` accepts. */
 function isTimeout(value: unknown): value is number {
   return typeof value === 'number' && value > 0 && value <= MAX_TIMEOUT;
 }
@@ -74,7 +74,7 @@ function userOf(options: unknown): string | undefined {
  * The options for an agent call that waited for the agent since `startedAt`: the time left of the
  * call's `budget` becomes its timeout, so that the wait and the answer together stay within one
  * timeout. Options that are not an object, and an invalid timeout, go to the agent as they are, and
- * `@shieldlabs/js` rejects them with `invalid_options`.
+ * `@shieldlabs-ai/js` rejects them with `invalid_options`.
  */
 function withTimeLeft(options: IdentifyOptions | undefined, budget: number, startedAt: number): IdentifyOptions | undefined {
   const given: unknown = options;
@@ -103,7 +103,7 @@ function checkOnLoadOf(value: ShieldLabsOptions['checkOnLoad']): IdentifyOptions
  *
  * - With `autoLoad` (the default), loading starts after the first render (`afterNextRender`) or on
  *   the first call, whichever comes first. With `autoLoad: false`, only `load()` starts it. `load()`
- *   of `@shieldlabs/js` is memoized as well, so the agent is imported once per page.
+ *   of `@shieldlabs-ai/js` is memoized as well, so the agent is imported once per page.
  * - A call that has to wait for the agent gets one timeout for the wait and the answer together.
  * - During server-side rendering nothing is loaded, the state stays `'loading'` and calls reject
  *   with `unsupported_environment` without touching the signals.
@@ -146,7 +146,7 @@ export class ShieldLabsState {
 
   constructor(options: ShieldLabsOptions) {
     // Everything except the two options of this package goes to `load()`, including load options
-    // that later 1.x versions of @shieldlabs/js add.
+    // that later 1.x versions of @shieldlabs-ai/js add.
     const { checkOnLoad, autoLoad, ...loadOptions } = options;
     this.loadOptions = definedOptions(loadOptions);
     this.checkOnLoad = checkOnLoadOf(checkOnLoad);
@@ -203,7 +203,7 @@ export class ShieldLabsState {
 
   check(options?: IdentifyOptions): Promise<IdentifyResult | null> {
     // Before load() with autoLoad: false the check is skipped at once, as the agent skips a check it
-    // does not run (`check()` of @shieldlabs/js resolves null for not_initialized).
+    // does not run (`check()` of @shieldlabs-ai/js resolves null for not_initialized).
     if (this.isBrowser && !this.allowed) return Promise.resolve(null);
     return this.run('check()', options, (agent, agentOptions) => agent.check(agentOptions));
   }
@@ -358,7 +358,7 @@ export class ShieldLabsState {
   }
 
   /**
-   * What `getAgent()` resolves: the agent of `@shieldlabs/js` with its calls, and the listeners of
+   * What `getAgent()` resolves: the agent of `@shieldlabs-ai/js` with its calls, and the listeners of
    * `identifyOnInteraction()`, outside the Angular zone like every call of this package. Anything else
    * the agent offers is inherited as it is. The same object for every `getAgent()`.
    */
