@@ -7,34 +7,28 @@ Thank you for improving the ShieldLabs Angular bindings.
 You need Node.js 20.19 or later (the build and lint tools need it, also for the default Angular 17
 toolchain). Angular 22 needs Node.js 22.22 or 24.15 or later.
 
+Install the development tools and the published `@shieldlabs-ai/js` peer dependency from this
+repository's root. You do not need a checkout of another SDK.
+
 ```bash
 npm ci
-npm install --no-save <path to shieldlabs-ai-js-1.0.0.tgz>
+npm install --no-save --legacy-peer-deps=false '@shieldlabs-ai/js@^1.0.0'
 ```
 
-### Until @shieldlabs-ai/js is on npm
+Repeat the second command after every `npm ci`, which removes the separately installed peer.
+`--no-save` leaves `package.json` and `package-lock.json` unchanged.
 
-`@shieldlabs-ai/js` is a peer dependency that is not published yet, so npm cannot resolve it from the
-registry. The loader is installed from a local tarball instead: build it in a working copy of
-[shieldlabs-js](https://github.com/ShieldLabs-ai/shieldlabs-js) with
-`npm ci && npm run build && npm pack`, and install it again after every `npm ci`, which removes it.
+### Why there is an `.npmrc`
+
+The lockfile was created with `legacy-peer-deps=true`; the repository keeps that setting for
+`npm ci`. The separate install uses `--legacy-peer-deps=false` to resolve the published peer.
+`save-dev=true` makes saved installs development dependencies by default; `--no-save` above avoids
+saving anything. These settings apply only to this checkout: npm does not publish `.npmrc`.
+
+CI still builds the loader from its `main` branch and tests the packed copy. The commands above
+instead test the published 1.x loader. To test a loader change, build and pack it in its own
+checkout, then replace the package name in the second command with the path to that tarball.
 Never commit a `file:` dependency or a tarball.
-
-The committed `.npmrc` makes this work with plain npm commands:
-
-- `legacy-peer-deps=true`: `npm install` and `npm ci` do not try to install peer dependencies (they
-  would fail with a 404 for `@shieldlabs-ai/js`). Because of this setting, the dependencies of the
-  Angular packages are listed explicitly in `devDependencies`.
-- `save-dev=true`: `npm install --no-save <tarball>` puts the loader into `node_modules`. With
-  `legacy-peer-deps` alone, npm leaves out a package that is listed as a peer dependency, even when
-  it is named on the command line. The setting also makes `npm install <package>` add a dev
-  dependency by default: pass `--save-prod` to add or update a runtime dependency.
-
-These settings apply to development only: the published package declares `@shieldlabs-ai/js` as a
-regular (required) peer dependency, and the workflows keep working after `@shieldlabs-ai/js` 1.0.0 is
-on npm. Once it is, the setup can be simplified: remove `.npmrc`, regenerate `package-lock.json` and
-drop the tarball steps (here, in the README, in `examples/standalone/README.md` and in the
-workflows).
 
 ## Checks
 
@@ -67,9 +61,10 @@ of a newer compiler is not meant to be used by older applications. To run the te
 against another major, swap the toolchain in `node_modules` (package files stay unchanged):
 
 ```bash
-npm run use-angular -- 22 <path to shieldlabs-ai-js-1.0.0.tgz>
+npm run use-angular -- 22 '@shieldlabs-ai/js@^1.0.0'
 npm test && npm run build
-npm ci                  # back to Angular 17, then install the tarball again
+npm ci                  # back to Angular 17
+npm install --no-save --legacy-peer-deps=false '@shieldlabs-ai/js@^1.0.0'
 ```
 
 CI runs the tests and the build on every supported major (17 to 22) and builds
