@@ -22,7 +22,7 @@ jobs:
         with:
           path: shieldlabs-angular
           persist-credentials: false
-      # Until @shieldlabs-ai/js is on npm, the checks install it from a tarball packed next to this repo.
+      # Test against the loader packed from its main branch before building the release.
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           repository: ShieldLabs-ai/shieldlabs-js

@@ -7,6 +7,9 @@ A signup form in a standalone Angular application (zoneless, signals). `provideS
 
 ## Run it
 
+Use Node.js 22.22 or 24.15 or later for this Angular 22 example. From this example directory,
+install the published packages from npm:
+
 ```bash
 npm install
 npm start
@@ -31,16 +34,20 @@ development domain to see results in the [analytics dashboard](https://app.shiel
 
 ## Build against local copies of the packages
 
-Inside the `shieldlabs-angular` repository, before `@shieldlabs-ai/angular` and `@shieldlabs-ai/js` are
-on npm (build and pack `@shieldlabs-ai/js` in its own repository first):
+Use the published loader and a tarball of this checkout to test changes to the Angular binding:
 
 ```bash
 # repository root
 npm ci
-npm install --no-save ../shieldlabs-js/shieldlabs-ai-js-1.0.0.tgz
+npm install --no-save --legacy-peer-deps=false '@shieldlabs-ai/js@^1.0.0'
 npm run build
 npm pack ./dist
 cd examples/standalone
-npm install --no-save --no-package-lock ../../shieldlabs-ai-angular-1.0.0.tgz ../../../shieldlabs-js/shieldlabs-ai-js-1.0.0.tgz
+npm install --no-save --no-package-lock ../../shieldlabs-ai-angular-1.0.0.tgz
 npm run build
 ```
+
+Adjust the tarball filename if the package version changes. To test a loader change as well,
+build and pack it in its own checkout and pass that tarball to both install commands in place of
+the published loader (include it in the example install too). Never commit a tarball or a `file:`
+dependency.

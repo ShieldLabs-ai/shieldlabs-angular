@@ -646,15 +646,18 @@ billable. A failed agent load is retried on the next `identify()`, `check()`, `g
 
 ## Development
 
+From the repository root, install the development tools and the published loader. No sibling
+repository is required. Repeat the loader install after each `npm ci`.
+
 ```bash
 npm ci
-npm install --no-save ../shieldlabs-js/shieldlabs-ai-js-1.0.0.tgz  # until @shieldlabs-ai/js is on npm
+npm install --no-save --legacy-peer-deps=false '@shieldlabs-ai/js@^1.0.0'
 npm run lint                  # tsc --noEmit (strict) and ESLint
 npm test                      # Vitest: jsdom and plain Node.js (server-side rendering)
 npm run test:coverage
 npm run build                 # ng-packagr, output in dist/
 npm run audit:deps            # npm audit: none in runtime dependencies, allowlisted ones in dev
-npm run use-angular -- 22 ../shieldlabs-js/shieldlabs-ai-js-1.0.0.tgz   # test against another major
+npm run use-angular -- 22 '@shieldlabs-ai/js@^1.0.0'   # test against another major
 ```
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md). Documentation: <https://docs.shieldlabs.ai>. Analytics

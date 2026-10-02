@@ -12,7 +12,7 @@ env:
   NG_CLI_ANALYTICS: 'false'
 
 jobs:
-  # Until @shieldlabs-ai/js is on npm, every job installs it from a tarball packed from its main branch.
+  # Test against the loader packed from its main branch; local setup can use its published version.
   core:
     name: Pack @shieldlabs-ai/js
     runs-on: ubuntu-latest
